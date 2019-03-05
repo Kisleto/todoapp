@@ -1,4 +1,8 @@
 package com.codecool.todoapp.Repository;
 
-public interface ToDoRepository {
+import com.codecool.todoapp.Entity.ToDo;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ToDoRepository extends JpaRepository<ToDo, Long> {
+
 }
