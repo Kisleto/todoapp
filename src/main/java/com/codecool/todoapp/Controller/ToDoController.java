@@ -21,7 +21,7 @@ public class ToDoController {
         return toDoRepository.findAll();
     }
 
-    //Adds new Todo
+    //Adds new to do
     @PostMapping("/addTodo")
     public void addTodo(@RequestParam("todo-title") String newTodo) {
         toDoRepository.save(ToDo.builder()
@@ -35,4 +35,20 @@ public class ToDoController {
         toDoRepository.deleteById(id);
     }
 
+    @PutMapping("/todos/{id}/toggle_status")
+    public void toggleCompleted(@RequestParam boolean status, @PathVariable("id") Long id) {
+        if (status) {
+            toDoRepository.toggleUpdate(Status.COMPLETE, id);
+            System.out.println(toDoRepository.toggleUpdate(Status.COMPLETE, id));
+
+        } else {
+            toDoRepository.toggleUpdate(Status.ACTIVE, id);
+        }
+    }
+
+    @GetMapping("/todos/{id}")
+    public void findById(@PathVariable("id") Long id) {
+        toDoRepository.findById(id).ifPresent(null);
+
+    }
 }
