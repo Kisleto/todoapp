@@ -1,10 +1,7 @@
 package com.codecool.todoapp.Entity;
 
 import com.codecool.todoapp.Status;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +16,8 @@ public class ToDo {
     @Id
     @GeneratedValue
     private long id;
-    
+
+    @NonNull
     private String title;
     private Status status;
 
