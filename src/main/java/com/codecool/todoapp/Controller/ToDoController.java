@@ -2,15 +2,18 @@ package com.codecool.todoapp.Controller;
 
 import com.codecool.todoapp.Entity.ToDo;
 import com.codecool.todoapp.Repository.ToDoRepository;
-import com.codecool.todoapp.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
 @RestController
+@Transactional
 public class ToDoController {
+
+    private static final String SUCCESS = "{\"success\":true}";
 
     @Autowired
     private ToDoRepository toDoRepository;
@@ -19,21 +22,22 @@ public class ToDoController {
     @PostMapping("/list")
     public List<ToDo> toDoList(@RequestParam String status) {
         if (status.equals("active")) {
-            return toDoRepository.findByStatus(Status.ACTIVE);
+            return toDoRepository.findByCompletedFalse();
         }
         if (status.equals("complete")) {
-            return toDoRepository.findByStatus(Status.COMPLETE);
+            return toDoRepository.findByCompletedTrue();
         }
         return toDoRepository.findAll();
     }
 
     //Adds new to do
     @PostMapping("/addTodo")
-    public void addTodo(@RequestParam("todo-title") String newTodo) {
+    public String addTodo(@RequestParam("todo-title") String newTodo) {
         toDoRepository.save(ToDo.builder()
                 .title(newTodo)
-                .status(Status.ACTIVE)
+                .completed(false)
                 .build());
+        return SUCCESS;
     }
 
     @DeleteMapping("/todos/{id}")
@@ -42,21 +46,35 @@ public class ToDoController {
     }
 
     @PutMapping("/todos/{id}/toggle_status")
-    public String toggleCompleted(@RequestParam boolean status, @PathVariable("id") Long id) {
-        if (status) {
-            toDoRepository.toggleUpdate(Status.COMPLETE, id);
-            return "completed";
-
+    public String toggleCompleted(@RequestParam String status, @PathVariable("id") Long id) {
+        if (status.equals("true")) {
+            toDoRepository.toggleUpdate(true, id);
+            return SUCCESS;
         } else {
-            toDoRepository.toggleUpdate(Status.ACTIVE, id);
-            return "false";
+            toDoRepository.toggleUpdate(false, id);
+            return SUCCESS;
         }
     }
 
-    @GetMapping("/todos/{id}")
-    public void findById(@PathVariable("id") Long id) {
-        toDoRepository.findById(id).ifPresent(null);
 
+    @DeleteMapping("/todos/completed")
+    public void deleteAllCompleted() {
+        toDoRepository.findByCompletedTrue().forEach(toDo -> toDoRepository.delete(toDo));
+    }
+
+
+    @PutMapping("/todos/{id}")
+    public void editTodo(@RequestParam("todo-title") String title, @PathVariable Long id) {
+        toDoRepository.findById(id).ifPresent(toDo -> toDo.setTitle(title));
+    }
+
+    @PutMapping("/todos/toggle_all")
+    public void toggleAll(@RequestParam("toggle-all") String status) {
+        if (status.equals("true")) {
+            toDoRepository.findByCompletedFalse().forEach(toDo -> toDo.setCompleted(true));
+        } else if (status.equals("false")) {
+            toDoRepository.findByCompletedTrue().forEach(toDo -> toDo.setCompleted(false));
+        }
     }
 
 

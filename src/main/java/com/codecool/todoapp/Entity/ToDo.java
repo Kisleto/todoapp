@@ -1,9 +1,10 @@
 package com.codecool.todoapp.Entity;
 
-import com.codecool.todoapp.Status;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @Data
@@ -17,9 +18,6 @@ public class ToDo {
 
     @NonNull
     private String title;
-
-    @Enumerated(value = EnumType.STRING)
-    private Status status;
 
     private boolean completed;
 }

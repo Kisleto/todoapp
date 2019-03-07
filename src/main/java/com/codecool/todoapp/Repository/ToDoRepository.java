@@ -1,7 +1,6 @@
 package com.codecool.todoapp.Repository;
 
 import com.codecool.todoapp.Entity.ToDo;
-import com.codecool.todoapp.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,11 +12,20 @@ public interface ToDoRepository extends JpaRepository<ToDo, Long> {
     void deleteById(long id);
 
     @Modifying
-    @Query("update ToDo t set t.status = ?1 where t.id = ?2")
+    @Query("update ToDo t set t.completed = ?1 where t.id = ?2")
     @Transactional
-    int toggleUpdate(Status status, Long id);
+    void toggleUpdate(boolean status, Long id);
+
+    @Modifying
+    @Query("update ToDo t set t.completed = ?1")
+    @Transactional
+    void toggleAll(boolean status);
 
 
-    List<ToDo> findByStatus(Status status);
+    List<ToDo> findByCompletedTrue();
+
+    List<ToDo> findByCompletedFalse();
+
+
 
 }
