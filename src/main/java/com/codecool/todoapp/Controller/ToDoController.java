@@ -17,7 +17,13 @@ public class ToDoController {
 
     //Gets all predefined todos from db
     @PostMapping("/list")
-    public List<ToDo> toDoList() {
+    public List<ToDo> toDoList(@RequestParam String status) {
+        if (status.equals("active")) {
+            return toDoRepository.findByStatus(Status.ACTIVE);
+        }
+        if (status.equals("complete")) {
+            return toDoRepository.findByStatus(Status.COMPLETE);
+        }
         return toDoRepository.findAll();
     }
 
@@ -36,13 +42,14 @@ public class ToDoController {
     }
 
     @PutMapping("/todos/{id}/toggle_status")
-    public void toggleCompleted(@RequestParam boolean status, @PathVariable("id") Long id) {
+    public String toggleCompleted(@RequestParam boolean status, @PathVariable("id") Long id) {
         if (status) {
             toDoRepository.toggleUpdate(Status.COMPLETE, id);
-            System.out.println(toDoRepository.toggleUpdate(Status.COMPLETE, id));
+            return "completed";
 
         } else {
             toDoRepository.toggleUpdate(Status.ACTIVE, id);
+            return "false";
         }
     }
 
@@ -51,4 +58,6 @@ public class ToDoController {
         toDoRepository.findById(id).ifPresent(null);
 
     }
+
+
 }

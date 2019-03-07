@@ -25,7 +25,7 @@ public class TodoappApplication {
     public CommandLineRunner init() {
         return args -> {
             ToDo toDo = ToDo.builder()
-                    .status(Status.ACTIVE)
+                    .status(Status.COMPLETE)
                     .title("TODO 1")
                     .build();
             toDoRepository.save(toDo);

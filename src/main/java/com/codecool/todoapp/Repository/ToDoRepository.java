@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface ToDoRepository extends JpaRepository<ToDo, Long> {
     void deleteById(long id);
@@ -17,6 +17,7 @@ public interface ToDoRepository extends JpaRepository<ToDo, Long> {
     @Transactional
     int toggleUpdate(Status status, Long id);
 
-    Optional<ToDo> findById(Long id);
+
+    List<ToDo> findByStatus(Status status);
 
 }
