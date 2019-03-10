@@ -1,6 +1,7 @@
 package com.codecool.todoapp.Repository;
 
 import com.codecool.todoapp.Entity.ToDo;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,9 @@ public interface ToDoRepository extends JpaRepository<ToDo, Long> {
 
     List<ToDo> findByCompletedFalse();
 
+    void deleteByTitle(@NonNull String title);
+
+    ToDo findByTitle(String title);
 
 
 }
