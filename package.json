@@ -1,0 +1,10 @@
+{
+  "name": "todoapp",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "@types/auth0-js": "^8.11.11",
+    "auth0-js": "latest",
+    "bootstrap": "^3.4.0"
+  }
+}
